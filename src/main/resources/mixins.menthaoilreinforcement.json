@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.musimusi634.menthaoilreinforcement.mixin",
+  "refmap": "mixins.menthaoilreinforcement.refmap.json",
+  "mixins": [
+    "LivingEntityMixin",
+    "EntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
