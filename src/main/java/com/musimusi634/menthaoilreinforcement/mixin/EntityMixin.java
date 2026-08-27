@@ -4,7 +4,6 @@ package com.musimusi634.menthaoilreinforcement.mixin;
 import com.musimusi634.menthaoilreinforcement.IMintDamageHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -15,7 +14,6 @@ import net.dice7000.menthaoil.mixin.IMenthaOilVictim;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
-import static net.dice7000.menthaoil.MORegistry.causeDeathMintDamage;
 
 @Mixin(value = Entity.class, priority = Integer.MAX_VALUE)
 public abstract class EntityMixin implements IMintDamageHolder {
@@ -42,15 +40,10 @@ public abstract class EntityMixin implements IMintDamageHolder {
     private void tickInject(CallbackInfo ci){
         Entity entity = (Entity) (Object) this;
         if (((IMenthaOilVictim) entity).menthaoil$getAffected()) {
-           if (menthaoil$count % 10 == 0) {
-               int mintdamage = ((IMintDamageHolder) entity).getMintDamage();
-               if ((entity instanceof LivingEntity livingentity)) {
-                   float replacedHealth = (float) (livingentity.getMaxHealth() * (1 - ((mintdamage + 1) * 0.1)));
-                   if (livingentity.getHealth() < replacedHealth) livingentity.setHealth(replacedHealth);
-                   if (replacedHealth <= 0) livingentity.die(causeDeathMintDamage(entity.level()));
-               }
-               ((IMintDamageHolder) entity).setMintDamage(((IMintDamageHolder) entity).getMintDamage() + 1);
+            if (menthaoil$count % 10 == 0) {
+                ((IMintDamageHolder) entity).setMintDamage(((IMintDamageHolder) entity).getMintDamage() + 1);
             }
+            if (!(entity.level().isClientSide()) && !(entity.getType() == EntityType.PLAYER) && mintDamage > 40) entity.remove(removalReason.KILLED);
         }
     }
     @Inject(method = "isRemoved", at = @At("RETURN"), cancellable = true)
@@ -58,7 +51,7 @@ public abstract class EntityMixin implements IMintDamageHolder {
         Entity entity = (Entity) (Object) this;
         if (!(entity.getType() == EntityType.PLAYER)) {
             int mintdamage = ((IMintDamageHolder) entity).getMintDamage();
-            if (mintdamage > 30) cir.setReturnValue(true);
+            if (mintdamage > 40) cir.setReturnValue(true);
         }
     }
     @Inject(method = "getRemovalReason", at = @At("RETURN"), cancellable = true)
@@ -66,7 +59,7 @@ public abstract class EntityMixin implements IMintDamageHolder {
         Entity entity = (Entity) (Object) this;
         if (!(entity.getType() == EntityType.PLAYER)) {
             int mintdamage = ((IMintDamageHolder) entity).getMintDamage();
-            if (mintdamage > 30) cir.setReturnValue(removalReason.KILLED);
+            if (mintdamage > 40) cir.setReturnValue(removalReason.KILLED);
         }
     }
 }
