@@ -29,7 +29,7 @@ public abstract class EntityMixin implements IMintDamageHolder {
     private void tickInject(CallbackInfo ci){
         Entity entity = (Entity) (Object) this;
         if (((IMenthaOilVictim) entity).menthaoil$getAffected()) {
-            if (entity.tickCount % 10 == 0) {
+            if (entity.getMenthaoilCount() % 10 == 0) {
                 ((IMintDamageHolder) entity).setMintDamage(((IMintDamageHolder) entity).getMintDamage() + 1);
             }
         }

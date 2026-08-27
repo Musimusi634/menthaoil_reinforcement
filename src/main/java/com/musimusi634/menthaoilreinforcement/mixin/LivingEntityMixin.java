@@ -13,10 +13,9 @@ public class LivingEntityMixin {
     @Inject(method = "getHealth", at = @At("RETURN"), cancellable = true)
     private void getHealthInject(CallbackInfoReturnable<Float> cir) {
         LivingEntity entity = (LivingEntity) (Object) this;
-        CompoundTag persistentData = entity.getPersistentData();
         int mintdamage = ((IMintDamageHolder) entity).getMintDamage();
-        if (mintdamage != 0) {
-            cir.setReturnValue((float) (cir.getReturnValue() - (entity.getMaxHealth() * (1 - mintdamage * 0.1))));
-        }
+        float health = cir.getReturnValue();
+        float replacedHealth = (float) (entity.getMaxHealth() * (1 - (mintdamage * 0.1)));
+        if (mintdamage > 0) if (health > replacedHealth) cir.setReturnValue(replacedHealth);
     }
 }
