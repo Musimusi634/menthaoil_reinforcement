@@ -15,7 +15,7 @@ public class LivingEntityMixin {
         int mintdamage = ((IMintDamageHolder) entity).getMintDamage();
         float health = cir.getReturnValue();
         float replacedHealth = (float) (entity.getMaxHealth() * (1 - (mintdamage * 0.1)));
-        if (mintdamage > 0) if (health > replacedHealth) cir.setReturnValue(replacedHealth);
+        if ((mintdamage > 0) && (health > replacedHealth)) cir.setReturnValue(replacedHealth);
     }
     @Inject(method = "isAlive", at = @At("RETURN"), cancellable = true)
     private void isAliveInject(CallbackInfoReturnable<Boolean> cir) {

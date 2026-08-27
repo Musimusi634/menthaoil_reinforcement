@@ -1,5 +1,6 @@
 package com.musimusi634.menthaoilreinforcement.mixin;
 
+import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.Item;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,5 +14,10 @@ public class ItemMixin {
     public void getMaxDamageInject(CallbackInfoReturnable<Integer> cir) {
         Item item = (Item) (Object) this;
         if (item instanceof MORegistry.MenthaOilItem || item instanceof MORegistry.MenthaSprayItem) cir.setReturnValue(Integer.MAX_VALUE);
+    }
+    @Inject(method = "isFoil",at = @At("RETURN"),cancellable = true)
+    public void isFoilInject(CallbackInfoReturnable<Boolean> cir) {
+        Item item = (Item) (Object) this;
+        if (item instanceof MORegistry.MenthaOilItem || item instanceof MORegistry.MenthaSprayItem) cir.setReturnValue(true);
     }
 }

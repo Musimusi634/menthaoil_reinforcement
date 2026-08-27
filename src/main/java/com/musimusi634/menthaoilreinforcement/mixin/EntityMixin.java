@@ -20,6 +20,7 @@ public abstract class EntityMixin implements IMintDamageHolder {
     @Shadow
     @Nullable
     private Entity.RemovalReason removalReason;
+
     @Unique
     private int mintDamage = 0;
 
@@ -49,17 +50,11 @@ public abstract class EntityMixin implements IMintDamageHolder {
     @Inject(method = "isRemoved", at = @At("RETURN"), cancellable = true)
     private void isRemovedInject(CallbackInfoReturnable<Boolean> cir){
         Entity entity = (Entity) (Object) this;
-        if (!(entity.getType() == EntityType.PLAYER)) {
-            int mintdamage = ((IMintDamageHolder) entity).getMintDamage();
-            if (mintdamage > 40) cir.setReturnValue(true);
-        }
+            if (!(entity.getType() == EntityType.PLAYER) && (mintDamage > 40)) cir.setReturnValue(true);
     }
     @Inject(method = "getRemovalReason", at = @At("RETURN"), cancellable = true)
     private void getRemovalReasonInject(CallbackInfoReturnable<Entity.RemovalReason> cir){
         Entity entity = (Entity) (Object) this;
-        if (!(entity.getType() == EntityType.PLAYER)) {
-            int mintdamage = ((IMintDamageHolder) entity).getMintDamage();
-            if (mintdamage > 40) cir.setReturnValue(removalReason.KILLED);
-        }
+        if (!(entity.getType() == EntityType.PLAYER) && (mintDamage > 40)) cir.setReturnValue(removalReason.KILLED);
     }
 }
