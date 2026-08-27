@@ -1,7 +1,6 @@
 package com.musimusi634.menthaoilreinforcement.mixin;
 
 import com.musimusi634.menthaoilreinforcement.IMintDamageHolder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,5 +16,17 @@ public class LivingEntityMixin {
         float health = cir.getReturnValue();
         float replacedHealth = (float) (entity.getMaxHealth() * (1 - (mintdamage * 0.1)));
         if (mintdamage > 0) if (health > replacedHealth) cir.setReturnValue(replacedHealth);
+    }
+    @Inject(method = "isAlive", at = @At("RETURN"), cancellable = true)
+    private void isAliveInject(CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        int mintdamage = ((IMintDamageHolder) entity).getMintDamage();
+        if (mintdamage > 20) cir.setReturnValue(false);
+    }
+    @Inject(method = "isDeadOrDying", at = @At("RETURN"), cancellable = true)
+    private void isDeadOrDyingInject(CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        int mintdamage = ((IMintDamageHolder) entity).getMintDamage();
+        if (mintdamage > 20) cir.setReturnValue(true);
     }
 }
