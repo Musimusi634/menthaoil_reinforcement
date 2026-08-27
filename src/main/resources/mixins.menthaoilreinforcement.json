@@ -4,8 +4,7 @@
   "refmap": "mixins.menthaoilreinforcement.refmap.json",
   "mixins": [
     "LivingEntityMixin",
-    "EntityMixin",
-    "EntityAccessor"
+    "EntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

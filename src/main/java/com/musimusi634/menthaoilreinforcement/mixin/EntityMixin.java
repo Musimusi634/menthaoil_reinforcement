@@ -15,6 +15,9 @@ public abstract class EntityMixin implements IMintDamageHolder {
     @Unique
     private int mintDamage = 0;
 
+    @Unique
+    private int menthaoil$count = 0;
+
     @Override
     public void setMintDamage(int value){
         mintDamage = value;
@@ -26,10 +29,10 @@ public abstract class EntityMixin implements IMintDamageHolder {
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
-    private void tickInject(CallbackInfo ci){
+    private void tickInjectInject(CallbackInfo ci){
         Entity entity = (Entity) (Object) this;
         if (((IMenthaOilVictim) entity).menthaoil$getAffected()) {
-            if (entity.getMenthaoilCount() % 10 == 0) {
+           if (menthaoil$count % 10 == 0) {
                 ((IMintDamageHolder) entity).setMintDamage(((IMintDamageHolder) entity).getMintDamage() + 1);
             }
         }

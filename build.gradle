@@ -124,12 +124,21 @@ repositories {
     maven {
         url "https://cursemaven.com"
     }
+    maven { url = "https://maven.bawnorton.com/releases" }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     implementation fg.deobf("curse.maven:mentha-oil-1665285:8731626")
+    compileOnly(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.7-beta.3"))
+    implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.3.7-beta.3")) {
+        jarJar.ranged(it, "[0.3.7-beta.3,)")
+    }
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.4"))
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.5.4")) {
+        jarJar.ranged(it, "[0.5.4,)")
+    }
 }
 
 mixin {
@@ -190,7 +199,7 @@ publishing {
         maven {
             url "file://${project.projectDir}/mcmodsrepo"
         }
-
+        maven { url = "https://maven.bawnorton.com/releases" }
     }
 }
 
